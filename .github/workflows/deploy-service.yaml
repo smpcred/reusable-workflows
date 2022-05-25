@@ -38,7 +38,7 @@ jobs:
         env:
           SECRET_ID: dev/user
           AWS_REGION: us-east-1
-          ENV_FILE: environments/.env.production
+          ENV_FILE: .env
         run: |
           aws secretsmanager get-secret-value --secret-id $SECRET_ID --region $AWS_REGION | \
             jq -r '.SecretString' | \
