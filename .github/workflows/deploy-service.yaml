@@ -31,6 +31,29 @@ jobs:
         with:
           node-version: 14
 
+      - name: Install Dependencies
+        run: npm install
+        
+      - name: Create .env file
+        env:
+          SECRET_ID: dev/user
+          AWS_REGION: us-east-1
+          ENV_FILE: .env
+        run: |
+          aws secretsmanager get-secret-value --secret-id $SECRET_ID --region $AWS_REGION | \
+            jq -r '.SecretString' | \
+            jq -r "to_entries|map(\"\(.key)=\\\"\(.value|tostring)\\\"\")|.[]" > $ENV_FILE
+          cat $ENV_FILE
+      
+      - name: Generate Migration
+        run: npm run migration:generate
+
+      - name: Run Migration
+        run: npm run migration:run
+
+      - name: Build App
+        run: npm run build
+
       - name: Build, tag, and push image to Amazon ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
