@@ -41,7 +41,6 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           ECR_REPO_NAME: ${{ secrets.ECR_REPO_NAME }}
         run: |
-          aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
           docker build -t $ECR_REGISTRY/$ECR_REPO_NAME:$IMAGE_TAG .
           docker tag $ECR_REGISTRY/$ECR_REPO_NAME:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPO_NAME:latest
           docker push $ECR_REGISTRY/$ECR_REPO_NAME:$IMAGE_TAG
@@ -57,4 +56,6 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
           ECR_REGISTRY: ${{ needs.generate_release_image.steps.login-ecr.outputs.registry }}
           ECR_REPO_NAME: ${{ inputs.ECR_REPO_NAME }}
-        run: kubectl set image deployment/$ECR_REPO_NAME $ECR_REPO_NAME=$ECR_REGISTRY/$ECR_REPO_NAME:$IMAGE_TAG
+        run: |
+          aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
+          kubectl set image deployment/$ECR_REPO_NAME $ECR_REPO_NAME=$ECR_REGISTRY/$ECR_REPO_NAME:$IMAGE_TAG
