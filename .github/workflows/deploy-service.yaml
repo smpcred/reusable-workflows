@@ -13,6 +13,8 @@ jobs:
   generate_release_image:
     name: Build and Push
     runs-on: smpcred-runner
+    env:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
     steps:
       - name: Check out code
         uses: actions/checkout@v3
@@ -43,6 +45,6 @@ jobs:
       - name: Deploy
         env:
           IMAGE_TAG: ${{ github.sha }}
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REGISTRY: ${{ needs.generate_release_image.steps.login-ecr.outputs.registry }}
           ECR_REPO_NAME: ${{ inputs.ECR_REPO_NAME }}
         run: kubectl set image deployment/$ECR_REPO_NAME $ECR_REPO_NAME=$ECR_REGISTRY/$ECR_REPO_NAME:$IMAGE_TAG
