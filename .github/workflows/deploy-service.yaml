@@ -37,6 +37,7 @@ jobs:
 
   deploy_version_on_eks:
     name: Deploy new Image on EKS cluster
+    needs: generate_release_image
     runs-on: smpcred-runner
     steps:
       - name: Deploy
