@@ -14,7 +14,7 @@ env:
   AWS_REGION: ${{ secrets.AWS_REGION }}
   ECR_REPO_NAME: ${{ secrets.ECR_REPO_NAME }}
 jobs:
-  generate_release_image:
+  build:
     name: Build and Push
     runs-on: smpcred-runner
     outputs:
@@ -46,14 +46,14 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPO_NAME:$IMAGE_TAG
           docker push $ECR_REGISTRY/$ECR_REPO_NAME:latest
 
-  deploy_version_on_eks:
+  deploy:
     name: Deploy new Image on EKS cluster
-    needs: generate_release_image
+    needs: build
     runs-on: smpcred-runner
     steps:
       - name: Deploy
         env:
-          ECR_REGISTRY: ${{ needs.generate_release_image.outputs.ECR_REGISTRY }}
+          ECR_REGISTRY: ${{ needs.build.outputs.ECR_REGISTRY }}
         run: |
           aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
           kubectl set image deployment/$ECR_REPO_NAME $ECR_REPO_NAME=$ECR_REGISTRY/$ECR_REPO_NAME:$IMAGE_TAG
