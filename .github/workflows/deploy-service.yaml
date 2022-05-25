@@ -43,6 +43,7 @@ jobs:
           aws secretsmanager get-secret-value --secret-id $SECRET_ID --region $AWS_REGION | \
             jq -r '.SecretString' | \
             jq -r "to_entries|map(\"\(.key)=\\\"\(.value|tostring)\\\"\")|.[]" > $ENV_FILE
+          cat $ENV_FILE
 
       - name: Run Migration
         run: npm run migration:run
