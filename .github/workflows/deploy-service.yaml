@@ -30,7 +30,10 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 14
-          
+      
+      - name: Build
+        run: npm run build
+
       - name: Build, tag, and push image to Amazon ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
