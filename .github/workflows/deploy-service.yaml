@@ -33,9 +33,6 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Teste DB conn
-        run: telnet dev.cluster-cchpyxfli526.us-east-1.rds.amazonaws.com 5432
-
       - name: Build, tag, and push image to Amazon ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
