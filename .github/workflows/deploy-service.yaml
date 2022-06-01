@@ -37,6 +37,7 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         run: |
+          echo $DATABASE_URL
           docker build -t $ECR_REGISTRY/$ECR_REPO_NAME:$IMAGE_TAG --build-arg DATABASE_URL=$DATABASE_URL .
           docker tag $ECR_REGISTRY/$ECR_REPO_NAME:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPO_NAME:latest
           docker push $ECR_REGISTRY/$ECR_REPO_NAME:$IMAGE_TAG
