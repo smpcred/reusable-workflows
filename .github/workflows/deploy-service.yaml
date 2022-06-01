@@ -39,8 +39,8 @@ jobs:
         with:
           node-version: 14
       
-      - name: Install yarn
-        run: npm install -g yarn
+      - name: Install yarn and dependencies
+        run: npm install -g yarn && yarn install
       
       - name: Build App
         run: yarn build
