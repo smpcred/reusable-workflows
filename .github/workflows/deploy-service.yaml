@@ -2,13 +2,11 @@ name: Deploy Service on EKS
 on:
   workflow_call:
     inputs:
-      DATABASE_URL:
+      AWS_REGION:
         required: true
         type: string
     secrets:
       CLUSTER_NAME:
-        required: true
-      AWS_REGION:
         required: true
       ECR_REPO_NAME:
         required: true
@@ -17,8 +15,9 @@ on:
 env:
   IMAGE_TAG: ${{ github.sha }}
   CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
-  AWS_REGION: ${{ secrets.AWS_REGION }}
+  AWS_REGION: ${{ inputs.AWS_REGION }}
   ECR_REPO_NAME: ${{ secrets.ECR_REPO_NAME }}
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
 jobs:
   build:
     name: Build and Deploy
