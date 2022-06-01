@@ -8,11 +8,14 @@ on:
         required: true
       ECR_REPO_NAME:
         required: true
+      DATABASE_URL:
+        required: true
 env:
   IMAGE_TAG: ${{ github.sha }}
   CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
   AWS_REGION: ${{ secrets.AWS_REGION }}
   ECR_REPO_NAME: ${{ secrets.ECR_REPO_NAME }}
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
 jobs:
   build:
     name: Build and Deploy
