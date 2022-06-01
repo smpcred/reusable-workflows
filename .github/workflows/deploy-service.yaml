@@ -17,7 +17,6 @@ env:
   CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
   AWS_REGION: ${{ inputs.AWS_REGION }}
   ECR_REPO_NAME: ${{ secrets.ECR_REPO_NAME }}
-  DATABASE_URL: ${{ secrets.DATABASE_URL }}
 jobs:
   build:
     name: Build and Deploy
@@ -41,6 +40,11 @@ jobs:
       
       - name: Install yarn and dependencies
         run: npm install -g yarn && yarn install
+        
+      - name: Make env file
+        uses: SpicyPizza/create-envfile@v1
+        with:
+          envkey_DATABASE_URL: ${{ secrets.DATABASE_URL }}
       
       - name: Build App
         run: yarn build
