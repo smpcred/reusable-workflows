@@ -10,6 +10,8 @@ on:
         required: true
       ECR_REPO_NAME:
         required: true
+      DATABASE_URL:
+        required: true
 env:
   IMAGE_TAG: ${{ github.sha }}
   CLUSTER_NAME: ${{ inputs.CLUSTER_NAME }}
@@ -22,13 +24,16 @@ jobs:
     outputs:
       ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
     steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.9.1
+        
       - name: Check out code
         uses: actions/checkout@v3
 
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-
+  
       - name: Build, tag, and push image to Amazon ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
