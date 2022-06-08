@@ -10,8 +10,6 @@ on:
         required: true
       ECR_REPO_NAME:
         required: true
-      DATABASE_URL:
-        required: true
 env:
   IMAGE_TAG: ${{ github.sha }}
   CLUSTER_NAME: ${{ inputs.CLUSTER_NAME }}
