@@ -43,7 +43,7 @@ jobs:
       
       - name: Format Deployment Name
         run: |
-          echo "DEPLOYMENT_NAME=$(echo prod-user | sed -e 's/prod-//g)" >> $GITHUB_ENV
+          echo "DEPLOYMENT_NAME=$(echo prod-user | sed -e 's/prod-//g')" >> $GITHUB_ENV
 
       - name: Deploy
         env:
